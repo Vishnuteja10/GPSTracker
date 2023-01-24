@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "354194286821",
+    "firebase_url": "https://gpstracking-a0c37-default-rtdb.firebaseio.com",
+    "project_id": "gpstracking-a0c37",
+    "storage_bucket": "gpstracking-a0c37.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:354194286821:android:8df1c2514d5fccd03a4c0c",
+        "android_client_info": {
+          "package_name": "com.example.gpstracking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "354194286821-fhhiqofv34fkovc7aeg2qdbttk4bqb1o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_5jn8pUmcEUZTstOXlZ7ZVWNC-X75OpQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "354194286821-fhhiqofv34fkovc7aeg2qdbttk4bqb1o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
