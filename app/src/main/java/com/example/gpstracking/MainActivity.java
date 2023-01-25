@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         String yourApiKey = "AAPKe51cbf3519894c988b8a151ef27fa2d1k6WJFSWYJGXW-5CNE7cs6TzTJvM1GJG_zbc6ZBHDVvwxEKktnuR4YtFUB0rUB0Bj";
         ArcGISRuntimeEnvironment.setApiKey(yourApiKey);
 
-        t1 = findViewById( R.id.t1 );
+       // t1 = findViewById( R.id.t1 );
 
         mapView = findViewById( R.id.mapView );
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
                 t1.setText( list[0]+"@"+list[1]+"@"+list[2] ); */
 
-               String str = snapshot.child( "loc1" ).getValue().toString();
+               String str = snapshot.child( "loc3" ).getValue().toString();
                 String[] list = str.split( "," );
 
                // t1.setText(list[0]+"  "+list[1]);
@@ -97,6 +97,15 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 trackLocation(lat,lon);
+
+              /*  for (DataSnapshot locSnapshot: snapshot.getChildren()) {
+                    String str = locSnapshot.child("loc").getValue().toString();
+                    String[] list = str.split( "," );
+                    for(int i=0;i< list.length;i++){
+                        lat = Double.parseDouble( list[0] );
+                        lon = Double.parseDouble( list[1] );
+                    }
+                } */
 
 
             }

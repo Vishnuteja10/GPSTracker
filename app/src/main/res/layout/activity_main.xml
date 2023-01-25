@@ -10,12 +10,12 @@
     <com.esri.arcgisruntime.mapping.view.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="500dp"/>
+        android:layout_height="match_parent"/>
 
-    <TextView
+   <!-- <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/t1"
-        />
+        /> -->
 
 </LinearLayout>
