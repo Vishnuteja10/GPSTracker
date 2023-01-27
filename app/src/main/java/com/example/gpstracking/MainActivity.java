@@ -3,6 +3,7 @@ package com.example.gpstracking;
 import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.esri.arcgisruntime.mapping.view.MapView;
 
 
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -65,9 +67,9 @@ public class MainActivity extends AppCompatActivity {
 
         HashMap<String,Object> map = new HashMap<>();
         map.put( "loc1","17.3616,78.4747" );
-        map.put( "loc2","17.3457,78.5522" );
-        map.put( "loc3","17.3984,78.5583" );
-        map.put( "loc4","17.3833,78.4011" );
+       // map.put( "loc2","17.3457,78.5522" );
+      //  map.put( "loc3","17.3984,78.5583" );
+     //   map.put( "loc4","17.3833,78.4011" );
 
 
 
@@ -77,7 +79,51 @@ public class MainActivity extends AppCompatActivity {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child( "trackerdetails" );
 
-        reference.addValueEventListener( new ValueEventListener() {
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+
+
+
+                String str = dataSnapshot.getValue().toString();
+                String[] list = str.split( "," );
+
+                for(int i=0;i< list.length;i++){
+                    lat = Double.parseDouble( list[0] );
+                    lon = Double.parseDouble( list[1] );
+                }
+
+                trackLocation(lat,lon);
+
+               /* Post newPost = dataSnapshot.getValue(Post.class);
+                System.out.println("Author: " + newPost.author);
+                System.out.println("Title: " + newPost.title);
+                System.out.println("Previous Post ID: " + prevChildKey); */
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+
+      /*  reference.addValueEventListener( new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -85,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String list[] = str.split(",");
 
-                t1.setText( list[0]+"@"+list[1]+"@"+list[2] ); */
+                t1.setText( list[0]+"@"+list[1]+"@"+list[2] ); /
 
                String str = snapshot.child( "loc3" ).getValue().toString();
                 String[] list = str.split( "," );
@@ -105,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                         lat = Double.parseDouble( list[0] );
                         lon = Double.parseDouble( list[1] );
                     }
-                } */
+                }
 
 
             }
@@ -114,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        } );
+        } );  */
 
 
 
