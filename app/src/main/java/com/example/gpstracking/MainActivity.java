@@ -66,10 +66,11 @@ public class MainActivity extends AppCompatActivity {
        //  myRef = database.getReference().child( "users" ).child( "user1" );
 
         HashMap<String,Object> map = new HashMap<>();
-       // map.put( "loc","17.3616,78.4747" );
-      //  map.put( "loc","17.3457,78.5522" );
-     //   map.put( "loc","17.3984,78.5583" );
-     //   map.put( "loc","17.3833,78.4011" );
+        map.put( "1675057692","17.3616,78.4747" );   // charminar
+        map.put( "1675057867","17.3457,78.5522" );   // Lb nagar
+        map.put( "1675057965","17.3984,78.5583" );   // uppal
+        map.put( "1675057994","17.3833,78.4011" );   // Golconda fort
+
 
 
 
@@ -77,9 +78,9 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseDatabase.getInstance().getReference().child( "trackerdetails" ).updateChildren( map );
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child( "trackerdetails" ).child( "loc" );
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child( "trackerdetails" );
 
-       /* reference.addChildEventListener(new ChildEventListener() {
+        reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
 
@@ -95,10 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
                 trackLocation(lat,lon);
 
-               /* Post newPost = dataSnapshot.getValue(Post.class);
-                System.out.println("Author: " + newPost.author);
-                System.out.println("Title: " + newPost.title);
-                System.out.println("Previous Post ID: " + prevChildKey); //
+
             }
 
             @Override
@@ -121,9 +119,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-        }); */
+        });
 
-        reference.addValueEventListener( new ValueEventListener() {
+      /*  reference.addValueEventListener( new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -131,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String list[] = str.split(",");
 
-                t1.setText( list[0]+"@"+list[1]+"@"+list[2] ); */
+                t1.setText( list[0]+"@"+list[1]+"@"+list[2] ); //
 
                String str = snapshot.getValue().toString();
                 String[] list = str.split( "," );
@@ -142,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                      lon = Double.parseDouble( list[1] );
                 }
 
-                trackLocation(lat,lon);
+                trackLocation(lat,lon);  //
 
               /*  for (DataSnapshot locSnapshot: snapshot.getChildren()) {
                     String str = locSnapshot.child("loc").getValue().toString();
@@ -151,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                         lat = Double.parseDouble( list[0] );
                         lon = Double.parseDouble( list[1] );
                     }
-                } */
+                } //
 
 
             }
@@ -160,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        } );
+        } );  */
 
 
 
