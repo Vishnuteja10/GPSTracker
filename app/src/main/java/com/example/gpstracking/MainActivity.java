@@ -6,8 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.esri.arcgisruntime.mapping.ArcGISMap;
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     TextView t1 ;
     MapView mapView;
     double lat,lon;
+    Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,17 @@ public class MainActivity extends AppCompatActivity {
 
         mapView = findViewById( R.id.mapView );
 
+        btn = findViewById( R.id.recent );
+
+        btn.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,Recent.class);
+                startActivity( intent );
+
+            }
+        } );
+
 
        //  database = FirebaseDatabase.getInstance();
        //  myRef = database.getReference().child( "users" ).child( "user1" );
@@ -70,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         map.put( "1675057867","17.3457,78.5522" );   // Lb nagar
         map.put( "1675057965","17.3984,78.5583" );   // uppal
         map.put( "1675057994","17.3833,78.4011" );   // Golconda fort
+        map.put("1675058994","27.1751,78.0421");  // Taj Mahal
 
 
 
