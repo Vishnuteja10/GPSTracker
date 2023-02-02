@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.esri.arcgisruntime.geometry.Point;
@@ -18,74 +17,80 @@ import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-public class Recent extends AppCompatActivity {
+import java.util.HashMap;
+
+public class yesterday extends AppCompatActivity {
 
     MapView mapView;
     double lat,lon;
-    TextView textView;
-
+    TextView textY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_recent );
-        mapView = findViewById( R.id.mapViewR );
-        textView = findViewById(R.id.text2);
+        setContentView( R.layout.activity_yesterday );
 
+        mapView = findViewById( R.id.mapViewY );
+        textY = findViewById( R.id.textY );
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child( "trackerdetails" );
+        HashMap<String,Object> map = new HashMap<>();
+        map.put( "1675057692","17.3616,78.4747" );   // charminar
+        map.put( "1675057867","17.3457,78.5522" );   // Lb nagar
+        map.put( "1675057965","17.3984,78.5583" );   // uppal
+        map.put( "1675057994","17.3833,78.4011" );   // Golconda fort
+        map.put("1675058994","27.1751,78.0421");  // Taj mahal
 
-       reference.limitToLast( 1 ).addChildEventListener( new ChildEventListener() {
-           @Override
-           public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+        FirebaseDatabase.getInstance().getReference().child( "trackerdetails" ).child( "date" ).updateChildren( map );
 
-               String str ="";
-               for(DataSnapshot ds : snapshot.getChildren()) {
-                   str = ds.getValue().toString();
-                   textView.setText( str );
-               }
+     /*   DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child( "trackerdetails" ).child( "date" );
 
-              String[] list = str.split( "," );
-
-               for(int i=0;i< list.length;i++){
-                   lat = Double.parseDouble( list[0] );
-                   lon = Double.parseDouble( list[1] );
-               }
-
-               trackLocation(lat,lon);
-           }
-
-           @Override
-           public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-           }
-
-           @Override
-           public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-           }
-
-           @Override
-           public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-           }
-
-           @Override
-           public void onCancelled(@NonNull DatabaseError error) {
-
-           }
-       } );
+        reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
 
 
 
+                String str = dataSnapshot.getValue().toString();
+                textY.setText( str );
+                String[] list = str.split( "," );
+
+              /*  for(int i=0;i< list.length;i++){
+                    lat = Double.parseDouble( list[0] );
+                    lon = Double.parseDouble( list[1] );
+                }  //
+
+              //  trackLocation(lat,lon);
+
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });  */
 
     }
 
@@ -128,5 +133,4 @@ public class Recent extends AppCompatActivity {
 
 
     }
-
 }

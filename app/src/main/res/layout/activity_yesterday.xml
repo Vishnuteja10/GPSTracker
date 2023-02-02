@@ -5,16 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Recent">
+    tools:context=".yesterday">
 
     <com.esri.arcgisruntime.mapping.view.MapView
-        android:id="@+id/mapViewR"
+        android:id="@+id/mapViewY"
         android:layout_width="match_parent"
-        android:layout_height="600dp"/>
+        android:layout_height="500dp"/>
 
     <TextView
-        android:id="@+id/text2"
+        android:id="@+id/textY"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+        android:layout_height="400dp"/>
 
 </LinearLayout>
