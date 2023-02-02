@@ -13,8 +13,18 @@
         android:layout_height="500dp"/>
 
     <TextView
-        android:id="@+id/textY"
+        android:id="@+id/t1"
         android:layout_width="match_parent"
-        android:layout_height="400dp"/>
+        android:layout_height="50dp"/>
+
+    <TextView
+        android:id="@+id/t2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+    <TextView
+        android:id="@+id/t3"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
 
 </LinearLayout>

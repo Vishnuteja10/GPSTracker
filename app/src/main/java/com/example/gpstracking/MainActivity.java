@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     TextView t1, t2;
     MapView mapView;
     double lat,lon;
-    Button btn;
+    Button btn,btnY;
     String name;
     List<String> list;
 
@@ -76,6 +76,16 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this,Recent.class);
                 startActivity( intent );
 
+            }
+        } );
+
+        btnY = findViewById( R.id.yesterDay );
+
+        btnY.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,yesterday.class);
+                startActivity( intent );
             }
         } );
 
