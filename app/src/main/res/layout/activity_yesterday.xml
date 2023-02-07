@@ -10,7 +10,7 @@
     <com.esri.arcgisruntime.mapping.view.MapView
         android:id="@+id/mapViewY"
         android:layout_width="match_parent"
-        android:layout_height="500dp"/>
+        android:layout_height="400dp"/>
 
     <TextView
         android:id="@+id/t1"
@@ -22,9 +22,10 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
 
-    <TextView
-        android:id="@+id/t3"
+    <ListView
+        android:id="@+id/lv"
         android:layout_width="match_parent"
-        android:layout_height="50dp"/>
+        android:layout_height="wrap_content"
+        />
 
 </LinearLayout>

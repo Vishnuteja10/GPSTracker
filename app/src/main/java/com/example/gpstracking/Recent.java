@@ -14,6 +14,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,9 @@ import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.BasemapStyle;
 import com.esri.arcgisruntime.mapping.Viewpoint;
+import com.esri.arcgisruntime.mapping.popup.Popup;
+import com.esri.arcgisruntime.mapping.popup.PopupDefinition;
+import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.MapView;
@@ -52,7 +56,6 @@ public class Recent extends AppCompatActivity {
     Button btn;
     GraphicsOverlay graphicsOverlay;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -64,6 +67,7 @@ public class Recent extends AppCompatActivity {
         ArcGISMap map = new ArcGISMap( BasemapStyle.ARCGIS_STREETS);
         mapView.setMap( map );
         graphicsOverlay = new GraphicsOverlay();
+
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child( "trackerdetails" );
 
@@ -152,9 +156,26 @@ public class Recent extends AppCompatActivity {
 
         Graphic pointGraphic = new Graphic(graphicPoint, simpleMarkerSymbol);
 
+    /*    // create a popup definition with one or more fields
+        PopupDefinition popupDefinition = new PopupDefinition();
+        popupDefinition.setDescription( lat+","+lon );
+
+        // create a popup with the popup definition and a point
+        Popup popup = new Popup( pointGraphic,popupDefinition );
+        popup.getPopupDefinition();  */
+
+
+
+       //  attributeSet =  lat+","+lon ;
+
+
+
+      //  mapView.getCallout().getTapLocation();
 
         // add the point graphic to the graphics overlay
         graphicsOverlay.getGraphics().add(pointGraphic);
+
+
 
 
 

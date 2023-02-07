@@ -203,6 +203,9 @@ public class MainActivity extends AppCompatActivity {
 
 
      /*   reference.limitToLast( 1 ).addValueEventListener( new ValueEventListener() {
+
+      mapView.getCallout().show(v,graphicPoint);
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String str ="";

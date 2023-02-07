@@ -2,10 +2,24 @@ package com.example.gpstracking;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
@@ -17,6 +31,9 @@ import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +51,11 @@ public class yesterday extends AppCompatActivity {
     double lat,lon;
     TextView t1,t2,t3;
     ArrayList<String> list;
+    ListView listView;
+    String[] arr;
+    private static final int PERMISSION_FINE_LOCATION =1 ;
+    FusedLocationProviderClient client;
+    String latt,lonn,str;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +65,9 @@ public class yesterday extends AppCompatActivity {
         mapView = findViewById( R.id.mapViewY );
         t1 = findViewById( R.id.t1);
         t2 =findViewById( R.id.t2 );
-        t3 = findViewById( R.id.t3 );
+
+        listView = findViewById( R.id.lv );
+
         ArcGISMap map = new ArcGISMap( BasemapStyle.ARCGIS_STREETS);
         mapView.setMap( map );
 
@@ -61,6 +85,8 @@ public class yesterday extends AppCompatActivity {
       //  FirebaseDatabase.getInstance().getReference().child( "trackerdetails" ).child( "" ).updateChildren( map1 );
 
         yesterDayLoc();
+
+
 
 
     }
@@ -95,7 +121,7 @@ public class yesterday extends AppCompatActivity {
     }
 
     private void getYesterdayCoord(String child){
-        t3.setText( child );
+       // t3.setText( child );
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("trackerdetails");
 
@@ -107,7 +133,9 @@ public class yesterday extends AppCompatActivity {
                     list.add(   dataSnapshot.getValue().toString());
                 }
                 plotPoints( list );
-               // t1.setText( list.toString() );
+                t1.setText( list.toString() );
+
+
             }
 
             @Override
@@ -124,6 +152,23 @@ public class yesterday extends AppCompatActivity {
 
     private void plotPoints(List<String> list){
        // t1.setText( list.toString() );
+
+        arr = list.toArray(new String[list.size()]);
+
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, arr);
+
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                str = (String) listView.getItemAtPosition( position );
+                alertBox( str );
+            }
+        } );
+
+
         String points = "";
         for (int i=0;i<list.size();i++){
 
@@ -197,4 +242,105 @@ public class yesterday extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult( requestCode, permissions, grantResults );
+        switch (requestCode){
+            case PERMISSION_FINE_LOCATION:
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    updateGps(str);
+                }else{
+                    Toast.makeText( this,"THIS APP NEEDS PERMISSIONS",Toast.LENGTH_SHORT ).show();
+                    finish();
+                }
+                break;
+        }
+    }
+
+    public void updateGps(String str){
+
+        client = LocationServices.getFusedLocationProviderClient( yesterday.this );
+
+        if(ActivityCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_FINE_LOCATION )== PackageManager.PERMISSION_GRANTED ){
+
+            // user provided the permission
+            client.getLastLocation().addOnSuccessListener( this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+
+                    // we got permission and location values such as lat and longitude
+                    latt = String.valueOf(  location.getLatitude());
+                    lonn = String.valueOf( location.getLongitude() );
+                    // t1.setText( latt+","+lonn );
+                    plotOnMap( latt,lonn ,str);
+                }
+            } );
+
+
+        }else{
+            // Permission not yet granted
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                requestPermissions( new String[] {Manifest.permission.ACCESS_FINE_LOCATION} , PERMISSION_FINE_LOCATION);
+            }
+
+        }
+
+    }
+
+    public void plotOnMap(String lat , String lon,String dest){
+        String str = lat+","+lon;
+
+
+        Uri baseuri = Uri.parse( "https://www.google.com/maps/dir/?api=1" );
+        Uri.Builder uribuilder = baseuri.buildUpon();
+        uribuilder.appendQueryParameter( "origin",str );
+        uribuilder.appendQueryParameter( "destination",dest );
+
+        Uri gmmIntentUri = Uri.parse( uribuilder.toString() );
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+
+    }
+
+    public void alertBox(String str){
+        // Create the object of AlertDialog Builder class
+        AlertDialog.Builder builder = new AlertDialog.Builder(yesterday.this);
+
+        // Set the message show for the Alert time
+        builder.setMessage("Do you want to exit ?");
+
+        // Set Alert Title
+        builder.setTitle("Want to know the directions on google maps");
+
+        // Set Cancelable false for when the user clicks on the outside the Dialog Box then it will remain show
+        builder.setCancelable(false);
+
+        // Set the positive button with yes name Lambda OnClickListener method is use of DialogInterface interface.
+        builder.setPositiveButton("Yes", (DialogInterface.OnClickListener) (dialog, which) -> {
+            // When the user click yes button then app will close
+            //   Intent intent = new Intent(MainActivity.this,Random.class);
+            //   startActivity( intent );
+            updateGps(str);
+        });
+
+        // Set the Negative button with No name Lambda OnClickListener method is use of DialogInterface interface.
+        builder.setNegativeButton("No", (DialogInterface.OnClickListener) (dialog, which) -> {
+            // If user click no then dialog box is canceled.
+            dialog.cancel();
+        });
+
+        // Create the Alert dialog
+        AlertDialog alertDialog = builder.create();
+        // Show the Alert Dialog box
+        alertDialog.show();
+
+    }
+
+
+
+
 }
