@@ -4,11 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.esri.arcgisruntime.mapping.ArcGISMap;
@@ -30,9 +32,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,8 +45,9 @@ public class MainActivity extends AppCompatActivity {
     TextView t1, t2;
     MapView mapView;
     double lat,lon;
-    Button btn,btnY;
-    String name;
+    Button btn,DateBtn;
+    EditText editText;
+    String name,date;
     List<String> list;
 
     @Override
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
         name="";
+        date="";
 
         list=new ArrayList<String>();
 
@@ -62,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
         t1 = findViewById( R.id.mt );
         t2 = findViewById( R.id.mt2 );
+        DateBtn = findViewById( R.id.Dbtn );
+        editText = findViewById( R.id.eText );
 
         mapView = findViewById( R.id.mapView );
 
@@ -79,12 +85,12 @@ public class MainActivity extends AppCompatActivity {
             }
         } );
 
-        btnY = findViewById( R.id.yesterDay );
 
-        btnY.setOnClickListener( new View.OnClickListener() {
+
+        DateBtn.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,yesterday.class);
+                Intent intent = new Intent(MainActivity.this, AnyDay.class);
                 startActivity( intent );
             }
         } );
@@ -201,187 +207,52 @@ public class MainActivity extends AppCompatActivity {
             }
         } ) ;
 
-
-     /*   reference.limitToLast( 1 ).addValueEventListener( new ValueEventListener() {
-
-      mapView.getCallout().show(v,graphicPoint);
-
+        // The belo code is used to create a calender kind of interface which enables user to select date
+        editText.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String str ="";
-                for(DataSnapshot ds : snapshot.getChildren()) {
-                    str = str+ds.getValue().toString();
+            public void onClick(View v) {
+                // on below line we are getting
+                // the instance of our calendar.
+                final Calendar c = Calendar.getInstance();
 
-                }
-                t2.setText( str );
+                // on below line we are getting
+                // our day, month and year.
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                // on below line we are creating a variable for date picker dialog.
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        // on below line we are passing context.
+                        MainActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // on below line we are setting date to our edit text.
+                                editText.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                            }
+                        },
+                        // on below line we are passing year,
+                        // month and day for selected date in our date picker.
+                        year, month, day);
+                // at last we are calling show to
+                // display our date picker dialog.
+                datePickerDialog.show();
             }
+        });
 
+        DateBtn.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(View v) {
+                date = editText.getText().toString();
+                t1.setText( date );
+                Intent intent = new Intent(MainActivity.this,AnyDay.class);
+                intent.putExtra( "date",date );
+                startActivity( intent );
             }
-        } );   */
-
-    /* addChildEventListener( new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                String str ="";
-                for(DataSnapshot ds : snapshot.getChildren()) {
-                    str = ds.getValue().toString();
-                    t2.setText( str );
-                }
-
-                String[] list = str.split( "," );
-
-                for(int i=0;i< list.length;i++){
-                    lat = Double.parseDouble( list[0] );
-                    lon = Double.parseDouble( list[1] );
-                }
-
-                trackLocation(lat,lon);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        } );  */
-
-      /*  reference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-
-                dataSnapshot.getRef().addValueEventListener( new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String str="";
-
-                        for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                            str = ds.getValue().toString();
-
-
-                           // list.add( str );
-                           // t1.setText( str );
-                        }
-
-                        t1.setText( str );
-
-                        String[] list = str.split( "," );
-
-                        for(int i=0;i< list.length;i++){
-                            lat = Double.parseDouble( list[0] );
-                            lon = Double.parseDouble( list[1] );
-                        }
-
-                        trackLocation(lat,lon);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                } );
-
-
-              /*  String str = dataSnapshot.getValue().toString();
-                t1.setText( str ); //
-
-           /*     String str="";
-
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    str = ds.getValue().toString();
-                    t1.setText( str );
-                }
-
-
-                String[] list = str.split( "," );
-
-                for(int i=0;i< list.length;i++){
-                    lat = Double.parseDouble( list[0] );
-                    lon = Double.parseDouble( list[1] );
-                }
-
-                trackLocation(lat,lon); //
-
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot,  String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot,  String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
-        });  */
-
-      /*  reference.addValueEventListener( new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-               /* String str = snapshot.getValue().toString();
-
-                String list[] = str.split(",");
-
-                t1.setText( list[0]+"@"+list[1]+"@"+list[2] ); //
-
-               String str = snapshot.getValue().toString();
-                String[] list = str.split( "," );
-
-               // t1.setText(list[0]+"  "+list[1]);
-                for(int i=0;i< list.length;i++){
-                     lat = Double.parseDouble( list[0] );
-                     lon = Double.parseDouble( list[1] );
-                }
-
-                trackLocation(lat,lon);  //
-
-              /*  for (DataSnapshot locSnapshot: snapshot.getChildren()) {
-                    String str = locSnapshot.child("loc").getValue().toString();
-                    String[] list = str.split( "," );
-                    for(int i=0;i< list.length;i++){
-                        lat = Double.parseDouble( list[0] );
-                        lon = Double.parseDouble( list[1] );
-                    }
-                } //
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        } );  */
+        } );
 
 
 

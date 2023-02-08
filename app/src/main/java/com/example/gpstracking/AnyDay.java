@@ -1,7 +1,6 @@
 package com.example.gpstracking;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -34,18 +33,19 @@ import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 
-public class yesterday extends AppCompatActivity {
+public class AnyDay extends AppCompatActivity {
 
     MapView mapView;
     double lat,lon;
@@ -55,12 +55,12 @@ public class yesterday extends AppCompatActivity {
     String[] arr;
     private static final int PERMISSION_FINE_LOCATION =1 ;
     FusedLocationProviderClient client;
-    String latt,lonn,str;
+    String latt,lonn,str,date,reqDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_yesterday );
+        setContentView( R.layout.activity_anyday );
 
         mapView = findViewById( R.id.mapViewY );
         t1 = findViewById( R.id.t1);
@@ -73,28 +73,49 @@ public class yesterday extends AppCompatActivity {
 
        // mapView.setViewpoint(new Viewpoint(lat, lon, 12441.638572));
 
+        date = getIntent().getStringExtra( "date" );
+
+        reqDate = dateToLong( date );
+
         list=new ArrayList<String>();
 
-        HashMap<String,Object> map1 = new HashMap<>();
+      //  HashMap<String,Object> map1 = new HashMap<>();
       //  map.put( "1675057692","17.3616,78.4747" );   // charminar
       //  map.put( "1675057867","17.3457,78.5522" );   // Lb nagar
       //  map.put( "1675057965","17.3984,78.5583" );   // uppal
       //  map.put( "1675057994","17.3833,78.4011" );   // Golconda fort
       //  map.put("1675058994","27.1751,78.0421");  // Taj mahal
+        //17.4239,78.4738-Tankbund , 17.4375,78.4482-ameerpet, 17.4531, 78.6851-ghatkesat,  17.4486,78.3908- madhapur
+        //17.4401,78.3489-gachibowli , 17.2403,78.4294-shamshabad, 17.4012, 78.5492-uppalStadium
 
       //  FirebaseDatabase.getInstance().getReference().child( "trackerdetails" ).child( "" ).updateChildren( map1 );
 
-        yesterDayLoc();
+        getAnyDayCoord( reqDate );
 
 
 
 
     }
+    private String dateToLong(String str){
+
+        long milliseconds= 12345678910L;
+        SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            Date d = f.parse(str);
+            milliseconds = d.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        // t1.setText(String.valueOf( milliseconds));
+
+        return String.valueOf( milliseconds );
+    }
 
 
 
 
-    private void yesterDayLoc(){
+  /*  private void yesterDayLoc(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("trackerdetails");
 
@@ -118,9 +139,9 @@ public class yesterday extends AppCompatActivity {
             }
         } );
 
-    }
+    }  */
 
-    private void getYesterdayCoord(String child){
+    private void getAnyDayCoord(String child){
        // t3.setText( child );
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("trackerdetails");
@@ -260,7 +281,7 @@ public class yesterday extends AppCompatActivity {
 
     public void updateGps(String str){
 
-        client = LocationServices.getFusedLocationProviderClient( yesterday.this );
+        client = LocationServices.getFusedLocationProviderClient( AnyDay.this );
 
         if(ActivityCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_FINE_LOCATION )== PackageManager.PERMISSION_GRANTED ){
 
@@ -308,7 +329,7 @@ public class yesterday extends AppCompatActivity {
 
     public void alertBox(String str){
         // Create the object of AlertDialog Builder class
-        AlertDialog.Builder builder = new AlertDialog.Builder(yesterday.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder( AnyDay.this);
 
         // Set the message show for the Alert time
         builder.setMessage("Do you want to exit ?");
