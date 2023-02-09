@@ -10,7 +10,16 @@
     <com.esri.arcgisruntime.mapping.view.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="600dp"/>
+        android:layout_height="400dp"/>
+
+    <TextView
+        android:id="@+id/mt"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
+    <TextView
+        android:id="@+id/mt2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -25,12 +34,30 @@
         android:layout_width="150dp"
         android:layout_height="80dp"/>
 
-    <Button
-        android:id="@+id/history"
-        android:text="History"
-        android:layout_margin="20dp"
-        android:layout_width="150dp"
-        android:layout_height="80dp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+        <EditText
+            android:id="@+id/eText"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="select date"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            />
+
+        <Button
+            android:id="@+id/Dbtn"
+            android:text="get Data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        </LinearLayout>
 
 </LinearLayout>
 
