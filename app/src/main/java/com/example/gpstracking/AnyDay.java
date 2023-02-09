@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -51,11 +53,12 @@ public class AnyDay extends AppCompatActivity {
     double lat,lon;
     TextView t1,t2,t3;
     ArrayList<String> list;
-    ListView listView;
     String[] arr;
     private static final int PERMISSION_FINE_LOCATION =1 ;
     FusedLocationProviderClient client;
     String latt,lonn,str,date,reqDate;
+    RecyclerView rv;
+    ArrayList<TrackerLocations> trackerLocations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,7 @@ public class AnyDay extends AppCompatActivity {
         t1 = findViewById( R.id.t1);
         t2 =findViewById( R.id.t2 );
 
-        listView = findViewById( R.id.lv );
+        rv = findViewById( R.id.rv );
 
         ArcGISMap map = new ArcGISMap( BasemapStyle.ARCGIS_STREETS);
         mapView.setMap( map );
@@ -171,15 +174,28 @@ public class AnyDay extends AppCompatActivity {
 
     }
 
-    private void plotPoints(List<String> list){
+    private void plotPoints(ArrayList<String> list){
        // t1.setText( list.toString() );
 
         arr = list.toArray(new String[list.size()]);
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,
-                androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, arr);
 
-        listView.setAdapter(adapter);
+
+        trackerLocations = TrackerLocations.createTrackerLocationsList( list );
+
+        LocationsAdapter adapter = new LocationsAdapter( trackerLocations, new LocationsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(TrackerLocations trackerLocations) {
+               // Toast.makeText( AnyDay.this,trackerLocations.getCoordinates(),Toast.LENGTH_SHORT ).show();
+                str = trackerLocations.getCoordinates();
+                alertBox( str );
+            }
+        } );
+        rv.setAdapter( adapter );
+        rv.setLayoutManager( new LinearLayoutManager( this ) );
+
+
+       /* listView.setAdapter(adapter);
 
         listView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
@@ -187,7 +203,7 @@ public class AnyDay extends AppCompatActivity {
                 str = (String) listView.getItemAtPosition( position );
                 alertBox( str );
             }
-        } );
+        } );  */
 
 
         String points = "";
